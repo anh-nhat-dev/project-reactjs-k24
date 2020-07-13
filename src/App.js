@@ -1,4 +1,5 @@
 import React from "react";
+import "moment/locale/vi";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import Header from "./shared/components/Layout/Header";
 import Footer from "./shared/components/Layout/Footer";
@@ -20,8 +21,8 @@ function App() {
       <div id="body">
         <div className="container">
           <Menu />
-          <div class="row">
-            <div id="main" class="col-lg-8 col-md-12 col-sm-12">
+          <div className="row">
+            <div id="main" className="col-lg-8 col-md-12 col-sm-12">
               <Slider />
               <Switch>
                 <Route path="/" exact component={HomePage} />
