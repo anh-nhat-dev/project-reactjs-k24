@@ -3,7 +3,6 @@ import { getImageProduct } from "../utils/index";
 import { Link } from "react-router-dom";
 
 const ProductItem = ({ item }) => {
-  console.log("ProductItem -> item", item);
   return (
     <div className="product-item card text-center">
       <Link to={`/product-detail-${item._id}`}>

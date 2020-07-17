@@ -1,148 +1,52 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
 
-const Search = () => {
+import { getProducts } from "../../services/Api";
+import ProductItem from "../../shared/components/ProductItem";
+import Pagination from "../../shared/components/Pagination";
+
+const Search = (props) => {
+  const query = new URLSearchParams(props.location.search);
+  const q = query.get("q");
+  const page = query.get("page") || 1;
+
+  const [pages, updatePages] = React.useState({
+    total: 0,
+    limit: 12,
+    currentPage: page,
+  });
+
+  const [products, updateProducts] = React.useState([]);
+
+  React.useEffect(() => {
+    getProducts({
+      params: {
+        name: q,
+        limit: 12,
+        page: page,
+      },
+    }).then(({ data }) => {
+      updateProducts(data.data.docs);
+      updatePages({ ...pages, ...data.data.pages });
+    });
+  }, [q, page]);
+
   return (
     <>
       {/*	List Product	*/}
       <div className="products">
         <div id="search-result">
-          Kết quả tìm kiếm với sản phẩm <span>iPhone Xs Max 2 Sim - 256GB</span>
+          Kết quả tìm kiếm với từ khóa <span>{q}</span>
         </div>
         <div className="product-list card-deck">
-          <div className="product-item card text-center">
-            <a href="#">
-              <img src="images/product-1.png" />
-            </a>
-            <h4>
-              <a href="#">iPhone Xs Max 2 Sim - 256GB</a>
-            </h4>
-            <p>
-              Giá Bán: <span>32.990.000đ</span>
-            </p>
-          </div>
-          <div className="product-item card text-center">
-            <a href="#">
-              <img src="images/product-2.png" />
-            </a>
-            <h4>
-              <a href="#">iPhone Xs Max 2 Sim - 256GB</a>
-            </h4>
-            <p>
-              Giá Bán: <span>32.990.000đ</span>
-            </p>
-          </div>
-          <div className="product-item card text-center">
-            <a href="#">
-              <img src="images/product-3.png" />
-            </a>
-            <h4>
-              <a href="#">iPhone Xs Max 2 Sim - 256GB</a>
-            </h4>
-            <p>
-              Giá Bán: <span>32.990.000đ</span>
-            </p>
-          </div>
-        </div>
-        <div className="product-list card-deck">
-          <div className="product-item card text-center">
-            <a href="#">
-              <img src="images/product-4.png" />
-            </a>
-            <h4>
-              <a href="#">iPhone Xs Max 2 Sim - 256GB</a>
-            </h4>
-            <p>
-              Giá Bán: <span>32.990.000đ</span>
-            </p>
-          </div>
-          <div className="product-item card text-center">
-            <a href="#">
-              <img src="images/product-5.png" />
-            </a>
-            <h4>
-              <a href="#">iPhone Xs Max 2 Sim - 256GB</a>
-            </h4>
-            <p>
-              Giá Bán: <span>32.990.000đ</span>
-            </p>
-          </div>
-          <div className="product-item card text-center">
-            <a href="#">
-              <img src="images/product-6.png" />
-            </a>
-            <h4>
-              <a href="#">iPhone Xs Max 2 Sim - 256GB</a>
-            </h4>
-            <p>
-              Giá Bán: <span>32.990.000đ</span>
-            </p>
-          </div>
-        </div>
-        <div className="product-list card-deck">
-          <div className="product-item card text-center">
-            <a href="#">
-              <img src="images/product-7.png" />
-            </a>
-            <h4>
-              <a href="#">iPhone Xs Max 2 Sim - 256GB</a>
-            </h4>
-            <p>
-              Giá Bán: <span>32.990.000đ</span>
-            </p>
-          </div>
-          <div className="product-item card text-center">
-            <a href="#">
-              <img src="images/product-8.png" />
-            </a>
-            <h4>
-              <a href="#">iPhone Xs Max 2 Sim - 256GB</a>
-            </h4>
-            <p>
-              Giá Bán: <span>32.990.000đ</span>
-            </p>
-          </div>
-          <div className="product-item card text-center">
-            <a href="#">
-              <img src="images/product-9.png" />
-            </a>
-            <h4>
-              <a href="#">iPhone Xs Max 2 Sim - 256GB</a>
-            </h4>
-            <p>
-              Giá Bán: <span>32.990.000đ</span>
-            </p>
-          </div>
+          {products.map((product) => {
+            return <ProductItem key={product._id} item={product} />;
+          })}
         </div>
       </div>
       {/*	End List Product	*/}
       <div id="pagination">
-        <ul className="pagination">
-          <li className="page-item">
-            <a className="page-link" href="#">
-              Trang trước
-            </a>
-          </li>
-          <li className="page-item active">
-            <a className="page-link" href="#">
-              1
-            </a>
-          </li>
-          <li className="page-item">
-            <a className="page-link" href="#">
-              2
-            </a>
-          </li>
-          <li className="page-item">
-            <a className="page-link" href="#">
-              3
-            </a>
-          </li>
-          <li className="page-item">
-            <a className="page-link" href="#">
-              Trang sau
-            </a>
-          </li>
-        </ul>
+        <Pagination pages={pages} />
       </div>
     </>
   );

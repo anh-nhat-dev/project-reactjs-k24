@@ -1,6 +1,20 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 
 const Header = () => {
+  const history = useHistory();
+  const [keyword, updateKeyWord] = React.useState("");
+
+  function handleOnChangeInput(e) {
+    const { value } = e.target;
+    updateKeyWord(value);
+  }
+
+  function handleOnSubmit(e) {
+    e.preventDefault();
+    history.push(`/search?q=${keyword}`);
+  }
+
   return (
     <div id="header">
       <div className="container">
@@ -13,12 +27,14 @@ const Header = () => {
             </h1>
           </div>
           <div id="search" className="col-lg-6 col-md-6 col-sm-12">
-            <form className="form-inline">
+            <form onSubmit={handleOnSubmit} className="form-inline">
               <input
                 className="form-control mt-3"
                 type="search"
+                value={keyword}
                 placeholder="Tìm kiếm"
                 aria-label="Search"
+                onChange={handleOnChangeInput}
               />
               <button className="btn btn-danger mt-3" type="submit">
                 Tìm kiếm

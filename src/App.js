@@ -41,6 +41,7 @@ function App() {
                   exact
                   component={ProductDetailPage}
                 />
+
                 <Route path="/category-:id" component={CategoryPage} exact />
                 <Route path="/search" exact component={SearchPage} />
                 <Route path="/cart" exact component={CartPage} />
