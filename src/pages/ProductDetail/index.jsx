@@ -14,7 +14,6 @@ const ProductDetail = ({ match, history }) => {
   const [product, updateProduct] = React.useState(null);
   const [comments, updateComments] = React.useState(null);
   const [inputComment, updateInputComment] = React.useState(null);
-  console.log("ProductDetail -> inputComment", inputComment);
 
   function getComments(id) {
     getCommentsProduct(id, { params: { sort: "-_id" } }).then(({ data }) => {

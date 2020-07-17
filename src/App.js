@@ -14,13 +14,23 @@ import SearchPage from "./pages/Search";
 import CartPage from "./pages/Cart";
 import NotFoundPage from "./pages/NotFound";
 
+import { getCategories } from "./services/Api";
+
 function App() {
+  const [categories, updateCategores] = React.useState([]);
+
+  React.useEffect(() => {
+    getCategories().then(({ data }) => {
+      updateCategores(data.data.docs);
+    });
+  }, []);
+
   return (
     <BrowserRouter>
       <Header />
       <div id="body">
         <div className="container">
-          <Menu />
+          <Menu data={categories} />
           <div className="row">
             <div id="main" className="col-lg-8 col-md-12 col-sm-12">
               <Slider />
