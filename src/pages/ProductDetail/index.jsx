@@ -1,5 +1,7 @@
 import React from "react";
 import moment from "moment";
+import { ADD_TO_CART } from "../../shared/constants/action-type";
+import { useDispatch } from "react-redux";
 
 import {
   getProduct,
@@ -10,6 +12,7 @@ import { getImageProduct } from "../../shared/utils";
 
 const ProductDetail = ({ match, history }) => {
   const { id } = match.params;
+  const dispatch = useDispatch();
 
   const [product, updateProduct] = React.useState(null);
   const [comments, updateComments] = React.useState(null);
@@ -34,6 +37,26 @@ const ProductDetail = ({ match, history }) => {
         getComments(id);
       }
     });
+  }
+
+  function addToCart(type) {
+    if (product) {
+      const { _id, name, image, price } = product;
+      dispatch({
+        type: ADD_TO_CART,
+        payload: {
+          _id,
+          name,
+          image,
+          price,
+          qty: 1,
+        },
+      });
+
+      if ("buy-now" === type) {
+        history.push("/cart");
+      }
+    }
   }
 
   React.useEffect(() => {
@@ -87,7 +110,16 @@ const ProductDetail = ({ match, history }) => {
                 </ul>
                 {product?.is_stock ? (
                   <div id="add-cart">
-                    <a href="#">Mua ngay</a>
+                    <button
+                      onClick={() => addToCart("buy-now")}
+                      className="btn btn-warning mr-2"
+                    >
+                      Mua ngay
+                    </button>
+
+                    <button onClick={addToCart} className="btn btn-info">
+                      Thêm vào giỏ hàng
+                    </button>
                   </div>
                 ) : null}
               </div>

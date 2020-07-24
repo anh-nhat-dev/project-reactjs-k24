@@ -1,6 +1,8 @@
 import React from "react";
 import "moment/locale/vi";
+import { Provider } from "react-redux";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+
 import Header from "./shared/components/Layout/Header";
 import Footer from "./shared/components/Layout/Footer";
 import Menu from "./shared/components/Layout/Menu";
@@ -16,45 +18,57 @@ import NotFoundPage from "./pages/NotFound";
 
 import { getCategories } from "./services/Api";
 
+import store from "./redux-setup/store";
+
 function App() {
   const [categories, updateCategores] = React.useState([]);
 
   React.useEffect(() => {
     getCategories().then(({ data }) => {
+      // localStorage.setItem("categories", JSON.stringify(data.data.docs));
+      // console.log("categories", JSON.parse(localStorage.getItem("categories")));
       updateCategores(data.data.docs);
+    });
+
+    const items = JSON.parse(localStorage.getItem("cart_items"));
+    store.dispatch({
+      type: "SYNC_CART",
+      payload: items?.length ? items : [],
     });
   }, []);
 
   return (
-    <BrowserRouter>
-      <Header />
-      <div id="body">
-        <div className="container">
-          <Menu data={categories} />
-          <div className="row">
-            <div id="main" className="col-lg-8 col-md-12 col-sm-12">
-              <Slider />
-              <Switch>
-                <Route path="/" exact component={HomePage} />
-                <Route
-                  path="/product-detail-:id"
-                  exact
-                  component={ProductDetailPage}
-                />
+    <Provider store={store}>
+      <BrowserRouter>
+        <Header />
+        <div id="body">
+          <div className="container">
+            <Menu data={categories} />
+            <div className="row">
+              <div id="main" className="col-lg-8 col-md-12 col-sm-12">
+                <Slider />
+                <Switch>
+                  <Route path="/" exact component={HomePage} />
+                  <Route
+                    path="/product-detail-:id"
+                    exact
+                    component={ProductDetailPage}
+                  />
 
-                <Route path="/category-:id" component={CategoryPage} exact />
-                <Route path="/search" exact component={SearchPage} />
-                <Route path="/cart" exact component={CartPage} />
-                <Route path="/404" exact component={NotFoundPage} />
-                <Route render={() => <Redirect to="/404" />} />
-              </Switch>
+                  <Route path="/category-:id" component={CategoryPage} exact />
+                  <Route path="/search" exact component={SearchPage} />
+                  <Route path="/cart" exact component={CartPage} />
+                  <Route path="/404" exact component={NotFoundPage} />
+                  <Route render={() => <Redirect to="/404" />} />
+                </Switch>
+              </div>
+              <SideBar />
             </div>
-            <SideBar />
           </div>
         </div>
-      </div>
-      <Footer />
-    </BrowserRouter>
+        <Footer />
+      </BrowserRouter>
+    </Provider>
   );
 }
 

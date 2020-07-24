@@ -1,9 +1,14 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Header = () => {
   const history = useHistory();
   const [keyword, updateKeyWord] = React.useState("");
+
+  const totalCart = useSelector(({ Cart }) =>
+    Cart.items.reduce((a, c) => a + c.qty, 0)
+  );
 
   function handleOnChangeInput(e) {
     const { value } = e.target;
@@ -42,10 +47,10 @@ const Header = () => {
             </form>
           </div>
           <div id="cart" className="col-lg-3 col-md-3 col-sm-12">
-            <a className="mt-4 mr-2" href="#">
+            <Link to="/cart" className="mt-4 mr-2" href="#">
               giỏ hàng
-            </a>
-            <span className="mt-3">8</span>
+            </Link>
+            <span className="mt-3">{totalCart}</span>
           </div>
         </div>
       </div>
