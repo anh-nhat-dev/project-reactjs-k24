@@ -8,7 +8,7 @@ import {
   getCommentsProduct,
   createCommentProduct,
 } from "../../services/Api";
-import { getImageProduct } from "../../shared/utils";
+import { getImageProduct, formatPriceNumber } from "../../shared/utils";
 
 const ProductDetail = ({ match, history }) => {
   const { id } = match.params;
@@ -99,7 +99,10 @@ const ProductDetail = ({ match, history }) => {
                   )}
 
                   <li id="price">Giá Bán (chưa bao gồm VAT)</li>
-                  <li id="price-number"> {product?.price || 0} đ</li>
+                  <li id="price-number">
+                    {" "}
+                    {formatPriceNumber(product?.price || 0)}
+                  </li>
                   <li id="status">
                     {product?.is_stock ? (
                       <span className="badge badge-success">Còn hàng</span>

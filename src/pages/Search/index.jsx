@@ -4,6 +4,7 @@ import React from "react";
 import { getProducts } from "../../services/Api";
 import ProductItem from "../../shared/components/ProductItem";
 import Pagination from "../../shared/components/Pagination";
+import ProductItemLoading from "../../shared/components/loading/ProductItemLoading";
 
 const Search = (props) => {
   const query = new URLSearchParams(props.location.search);
@@ -16,9 +17,12 @@ const Search = (props) => {
     currentPage: page,
   });
 
+  const [loadingProduct, updateLoadingProduct] = React.useState(false);
+
   const [products, updateProducts] = React.useState([]);
 
   React.useEffect(() => {
+    updateLoadingProduct(true);
     getProducts({
       params: {
         name: q,
@@ -28,6 +32,7 @@ const Search = (props) => {
     }).then(({ data }) => {
       updateProducts(data.data.docs);
       updatePages({ ...pages, ...data.data.pages });
+      updateLoadingProduct(false);
     });
   }, [q, page]);
 
@@ -39,9 +44,13 @@ const Search = (props) => {
           Kết quả tìm kiếm với từ khóa <span>{q}</span>
         </div>
         <div className="product-list card-deck">
-          {products.map((product) => {
-            return <ProductItem key={product._id} item={product} />;
-          })}
+          {!loadingProduct ? (
+            products.map((product) => {
+              return <ProductItem key={product._id} item={product} />;
+            })
+          ) : (
+            <ProductItemLoading loop={12} />
+          )}
         </div>
       </div>
       {/*	End List Product	*/}

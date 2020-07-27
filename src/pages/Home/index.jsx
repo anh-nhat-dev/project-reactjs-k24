@@ -1,16 +1,28 @@
 import React from "react";
 import ProductItem from "../../shared/components/ProductItem";
 import { getProducts } from "../../services/Api";
+import ProductItemLoading from "../../shared/components/loading/ProductItemLoading";
 
 const Home = () => {
   const [productNews, updateProductNews] = React.useState([]);
   const [productFeature, updateProductFeature] = React.useState([]);
 
+  const [loading, updateLoading] = React.useState({
+    loadingProductNews: false,
+    loadingProductFeature: false,
+  });
+
   React.useEffect(() => {
-    getProducts({ params: { limit: 6 } }).then(({ data }) => {
-      updateProductNews(data.data.docs);
+    updateLoading({
+      ...loading,
+      loadingProductNews: true,
+      loadingProductFeature: true,
     });
 
+    getProducts({ params: { limit: 6 } }).then(({ data }) => {
+      updateLoading({ ...loading, loadingProductNews: false });
+      updateProductNews(data.data.docs);
+    });
     getProducts({
       params: {
         limit: 6,
@@ -18,7 +30,9 @@ const Home = () => {
       },
     }).then(({ data }) => {
       updateProductFeature(data.data.docs);
+      updateLoading({ ...loading, loadingProductFeature: false });
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -26,17 +40,25 @@ const Home = () => {
       <div className="products">
         <h3>Sản phẩm nổi bật</h3>
         <div className="product-list card-deck">
-          {productFeature.map((product) => {
-            return <ProductItem key={product._id} item={product} />;
-          })}
+          {!loading?.loadingProductFeature ? (
+            productFeature.map((product) => {
+              return <ProductItem key={product._id} item={product} />;
+            })
+          ) : (
+            <ProductItemLoading />
+          )}
         </div>
       </div>
       <div className="products">
         <h3>Sản phẩm mới</h3>
         <div className="product-list card-deck">
-          {productNews.map((product) => {
-            return <ProductItem key={product._id} item={product} />;
-          })}
+          {!loading.loadingProductNews ? (
+            productNews.map((product) => {
+              return <ProductItem key={product._id} item={product} />;
+            })
+          ) : (
+            <ProductItemLoading />
+          )}
         </div>
       </div>
     </>

@@ -1,5 +1,5 @@
 import React from "react";
-import { getImageProduct } from "../utils/index";
+import { getImageProduct, formatPriceNumber } from "../utils/index";
 import { Link } from "react-router-dom";
 
 const ProductItem = ({ item }) => {
@@ -12,7 +12,7 @@ const ProductItem = ({ item }) => {
         <Link to={`/product-detail-${item._id}`}>{item.name}</Link>
       </h4>
       <p>
-        Giá Bán: <span>{item.price}đ</span>
+        Giá Bán: <span>{formatPriceNumber(item?.price)}</span>
       </p>
     </div>
   );

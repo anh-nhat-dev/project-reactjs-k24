@@ -1,6 +1,7 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable no-restricted-globals */
 import React from "react";
-import { getImageProduct } from "../../shared/utils";
+import { getImageProduct, formatPriceNumber } from "../../shared/utils";
 import {
   UPDATE_CART,
   DELETE_ITEM_CART,
@@ -91,7 +92,7 @@ const Cart = () => {
                     />
                   </div>
                   <div className="cart-price col-lg-3 col-md-3 col-sm-12">
-                    <b>{item?.price}</b>
+                    <b>{formatPriceNumber(item?.price)}</b>
                     <a onClick={(e) => onDeleteItem(e, item?._id)} href="#">
                       Xóa
                     </a>
@@ -115,7 +116,7 @@ const Cart = () => {
                 <b>Tổng cộng:</b>
               </div>
               <div className="cart-price col-lg-3 col-md-3 col-sm-12">
-                <b>{totalPrice}</b>
+                <b>{formatPriceNumber(totalPrice)}</b>
               </div>
             </div>
           </form>

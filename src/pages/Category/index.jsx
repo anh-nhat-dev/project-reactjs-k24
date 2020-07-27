@@ -1,5 +1,6 @@
 import React from "react";
 import ProductItem from "../../shared/components/ProductItem";
+import ProductItemLoading from "../../shared/components/loading/ProductItemLoading";
 
 import { getCategory, getProductsCategory } from "../../services/Api";
 
@@ -10,7 +11,10 @@ const Category = (props) => {
   const [products, updatePropducts] = React.useState([]);
   const [totalProduct, updateTotalProduct] = React.useState(0);
 
+  const [loadingProduct, updateLoadingProduct] = React.useState(false);
+
   React.useEffect(() => {
+    updateLoadingProduct(true);
     getCategory(id)
       .then(({ data }) => {
         if (data && !data.data) return props.history.push("/404");
@@ -19,6 +23,7 @@ const Category = (props) => {
           updateTotalProduct(data?.data?.items?.total || 0);
         });
         updateCategory(data.data);
+        updateLoadingProduct(false);
       })
       .catch((err) => props.history.push("/404"));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -34,9 +39,13 @@ const Category = (props) => {
           </h3>
 
           <div className="product-list card-deck">
-            {products.map((product) => {
-              return <ProductItem key={product._id} item={product} />;
-            })}
+            {!loadingProduct ? (
+              products.map((product) => {
+                return <ProductItem key={product._id} item={product} />;
+              })
+            ) : (
+              <ProductItemLoading loop={12} />
+            )}
           </div>
         </div>
         {/*	End List Product	*/}

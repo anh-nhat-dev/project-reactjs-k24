@@ -26,9 +26,9 @@ const Header = () => {
         <div className="row">
           <div id="logo" className="col-lg-3 col-md-3 col-sm-12">
             <h1>
-              <a href="#">
+              <Link to={"/"}>
                 <img className="img-fluid" src="/images/logo.png" />
-              </a>
+              </Link>
             </h1>
           </div>
           <div id="search" className="col-lg-6 col-md-6 col-sm-12">
