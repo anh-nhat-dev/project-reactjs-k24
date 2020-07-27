@@ -29,12 +29,6 @@ function App() {
       // console.log("categories", JSON.parse(localStorage.getItem("categories")));
       updateCategores(data.data.docs);
     });
-
-    const items = JSON.parse(localStorage.getItem("cart_items"));
-    store.dispatch({
-      type: "SYNC_CART",
-      payload: items?.length ? items : [],
-    });
   }, []);
 
   return (
