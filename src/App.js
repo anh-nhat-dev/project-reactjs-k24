@@ -15,6 +15,7 @@ import CategoryPage from "./pages/Category";
 import SearchPage from "./pages/Search";
 import CartPage from "./pages/Cart";
 import NotFoundPage from "./pages/NotFound";
+import OrderSuccess from "./pages/OrderSuccess";
 
 import { getCategories } from "./services/Api";
 
@@ -52,6 +53,7 @@ function App() {
                   <Route path="/category-:id" component={CategoryPage} exact />
                   <Route path="/search" exact component={SearchPage} />
                   <Route path="/cart" exact component={CartPage} />
+                  <Route path="/order-success" exact component={OrderSuccess} />
                   <Route path="/404" exact component={NotFoundPage} />
                   <Route render={() => <Redirect to="/404" />} />
                 </Switch>

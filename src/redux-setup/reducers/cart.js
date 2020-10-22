@@ -2,6 +2,7 @@ import {
   ADD_TO_CART,
   UPDATE_CART,
   DELETE_ITEM_CART,
+  RESET_CART,
 } from "../../shared/constants/action-type";
 
 const initState = {
@@ -19,6 +20,8 @@ export default function (state = initState, action) {
         (item) => item._id !== action.payload.id
       );
       return { ...state, items: newCarts };
+    case RESET_CART:
+      return initState;
     default:
       return state;
   }
